@@ -1,6 +1,17 @@
 export interface CuratedList { id: string; name: string; blurb: string; from?: string; until?: string; items: number[] }
 export interface ListsFileV1 { v: 1; updated: string; movies: CuratedList[]; series: CuratedList[] }
 
+// The app (sbtlTV selected-lists.ts) rejects the WHOLE file past these, and keeps its old copy,
+// so they're enforced here too: a file over them must never deploy.
+export const MAX_LISTS_PER_TYPE = 50;
+export const MAX_LISTS_BYTES = 256 * 1024;
+
+/** Size check on the raw file text (bytes as UTF-8). Null when it fits. */
+export function validateListsSize(raw: string): string | null {
+  const bytes = new TextEncoder().encode(raw).length;
+  return bytes > MAX_LISTS_BYTES ? `file is ${bytes} bytes, the app accepts at most 256 KB` : null;
+}
+
 const ID = /^[a-z0-9-]{1,48}$/;
 const LINK = /https?:|www\.|\b[a-z0-9-]+\.(com|net|org|tv|io|me|gg|xyz|ru|cc|co|info|app|dev|link|ly)\b/i;
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -32,6 +43,7 @@ export function validateListsFile(data: unknown): string[] {
   for (const section of ['movies', 'series'] as const) {
     const lists = data[section];
     if (!Array.isArray(lists)) { errors.push(`${section} must be an array`); continue; }
+    if (lists.length > MAX_LISTS_PER_TYPE) errors.push(`${section}: at most ${MAX_LISTS_PER_TYPE} lists (the app ignores the whole file past that)`);
     lists.forEach((l, i) => {
       const where = `${section}[${i}]`;
       if (!isObject(l)) { errors.push(`${where}: must be an object`); return; }

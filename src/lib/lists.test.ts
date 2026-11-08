@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import repoFile from '../../lists/v1.json';
-import { validateListsFile } from './lists';
+import { validateListsFile, validateListsSize } from './lists';
 
 const list = (over: Record<string, unknown> = {}) => ({
   id: 'halloween-classics', name: 'Halloween classics', blurb: 'Old favourites.', items: [694, 948, 539], ...over,
@@ -49,6 +49,15 @@ describe('validateListsFile', () => {
     expect(validateListsFile(file({ movies: [list({ from: '2026-11-02', until: '2026-11-01' })] })).join())
       .toMatch(/until/);
     expect(validateListsFile(file({ updated: 'yesterday' })).join()).toMatch(/updated/);
+  });
+  test('the app\'s caps: at most 50 lists per type', () => {
+    const many = Array.from({ length: 51 }, (_, i) => list({ id: `l${i}` }));
+    expect(validateListsFile(file({ movies: many })).join()).toMatch(/50/);
+    expect(validateListsFile(file({ movies: many.slice(0, 50) }))).toEqual([]);
+  });
+  test('the app\'s caps: the file stays under 256 KB', () => {
+    expect(validateListsSize('x'.repeat(256 * 1024 + 1))).toMatch(/256 KB/);
+    expect(validateListsSize('{}')).toBeNull();
   });
   test('not an object', () => {
     expect(validateListsFile(null)).not.toEqual([]);
