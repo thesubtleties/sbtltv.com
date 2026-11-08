@@ -2,6 +2,8 @@ name: Deploy
 on:
   push:
     branches: [main]
+    # Changes that can't affect the built site don't rebuild it
+    paths-ignore: ['README.md', 'media-src/**', '.github/workflows/ci.yml', '.github/dependabot.yml']
   workflow_dispatch:
   schedule:
     - cron: '7 * * * *' # hourly: rebuild only when a new sbtlTV release is out
