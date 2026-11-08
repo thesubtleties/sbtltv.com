@@ -1,8 +1,8 @@
 name: CI
+# Checks only (never publishes). PRs only, so a branch with an open PR runs once, not twice.
 on:
   pull_request:
-  push:
-    branches-ignore: [main]
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
