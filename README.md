@@ -27,3 +27,15 @@ app ignores one. `lists/public-key.pem` is the matching public key.
 ## Privacy
 
 No analytics, cookies or third-party requests. nginx keeps no access log. See the site's Privacy section.
+
+### Editing the lists
+
+1. Edit `lists/draft.json`: per list `id`, `name`, `blurb`, optional `from`/`until` (YYYY-MM-DD), and `titles`
+   as `["Title", year]`, `["Title", year, "all"]` (series: also take same-name TMDB variants) or `{ "tmdb": id }`.
+   Row order on the app's home = order in the file. 30-60 titles per list, best first: each user only sees
+   what their provider has, and a list hides itself under 6.
+2. `pnpm lists` checks every title against TMDB (prints what it matched; `<-- check` = year or name differs)
+   and how many your own library has. `pnpm lists --write` writes `lists/v1.json`.
+3. `pnpm sign-lists`, `pnpm build && pnpm check-dist`, commit, push.
+
+TMDB token: `~/.config/sbtltv-lists/tmdb.env` (or `TMDB_TOKEN`), never in the repo.
