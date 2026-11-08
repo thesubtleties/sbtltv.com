@@ -10,6 +10,8 @@ const cases: [string, string, string, number, ReturnType<typeof detectOs>][] = [
   ['iPhone', 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)', 'iPhone', 5, null],
   ['Android', 'Mozilla/5.0 (Linux; Android 15; Pixel 9) Chrome/140 Mobile', 'Linux armv8l', 5, null],
   ['ChromeOS', 'Mozilla/5.0 (X11; CrOS x86_64 16000.0.0) Chrome/140', 'Linux x86_64', 0, null],
+  ['Linux on ARM (Asahi, Raspberry Pi)', 'Mozilla/5.0 (X11; Linux aarch64; rv:140.0) Gecko/20100101 Firefox/140.0', 'Linux aarch64', 0, null],
+  ['Linux armv7l', 'Mozilla/5.0 (X11; Linux armv7l) Chrome/140', 'Linux armv7l', 0, null],
   ['unknown', 'curl/8.10', '', 0, null],
 ];
 

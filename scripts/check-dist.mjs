@@ -63,6 +63,11 @@ for (const f of ['dist/robots.txt', 'dist/sitemap.xml', 'dist/llms.txt']) if (!e
 if ((html.match(/class="frame /g) || []).length !== 3) fail.push('hero needs three screenshot frames');
 for (const l of ['Live TV', 'Movies', 'Series']) if (!new RegExp(`<label[^>]*for="shot-[a-z]+"[^>]*>${l}</label>`).test(html)) fail.push(`missing shot label ${l}`);
 
+// Reduced motion must show a screenshot even where :has() isn't supported (Firefox ESR 115)
+const css = (await import('node:fs')).readdirSync('dist/_astro').filter((f) => f.endsWith('.css')).map((f) => readFileSync(`dist/_astro/${f}`, 'utf8')).join('\n');
+const rm = css.match(/@media \(prefers-reduced-motion: ?reduce\)\{[^@]*/g)?.join('') ?? '';
+if (!/(^|[}{])\.f1\{[^}]*opacity:1/.test(rm)) fail.push('reduced motion needs a plain .f1{opacity:1} fallback');
+
 // Background loop: present, small, muted autoplay loop, with a still for reduced motion
 if (!/<video[^>]*\bautoplay\b[^>]*\bmuted\b[^>]*\bloop\b[^>]*\bplaysinline\b/.test(html)) fail.push('background video must be autoplay muted loop playsinline');
 for (const f of ['dist/media/bg.webm', 'dist/media/bg.mp4', 'dist/media/bg-poster.webp']) {

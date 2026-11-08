@@ -6,6 +6,6 @@ export function detectOs(ua: string, platform: string, maxTouchPoints: number): 
   if (/android|iphone|ipad|ipod|cros/i.test(s)) return null;
   if (/mac/i.test(s)) return maxTouchPoints > 1 ? null : 'mac'; // iPadOS reports a Mac
   if (/win/i.test(s)) return 'windows';
-  if (/linux|x11/i.test(s)) return 'linux';
+  if (/linux|x11/i.test(s)) return /aarch64|arm/i.test(s) ? null : 'linux'; // our Linux builds are x86_64 only
   return null;
 }

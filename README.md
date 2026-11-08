@@ -9,7 +9,8 @@ Static Astro site, no analytics, no third-party requests. AGPL-3.0.
 
 - The build reads the latest stable sbtlTV release from GitHub and bakes the download links in. If any
   file is missing or GitHub doesn't answer, the build fails and the live site stays as it was.
-- `Deploy` runs on push to main and hourly; the hourly run only rebuilds when a new release is out.
+- `Deploy` runs on push to main and hourly; the hourly run only builds when the registry has no
+  image tagged with the newest release yet (`ghcr.io/thesubtleties/sbtltv-web:vX.Y.Z`).
   GitHub turns scheduled workflows off after 60 days without repo activity: list updates keep it alive,
   otherwise run Deploy by hand after a release.
 - The cluster restarts the site hourly to pull the new image (no cluster credentials in GitHub).

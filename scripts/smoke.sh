@@ -24,4 +24,9 @@ code=$(curl -sS -o /dev/null -w '%{http_code}' --compressed -H "If-None-Match: $
 curl -fsS "$base/version.txt" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$' || fail "version.txt"
 code=$(curl -sS -o /dev/null -w '%{http_code}' "$base/nope")
 [ "$code" = 404 ] || fail "missing page gave $code, want 404"
+# Nothing about visitors may reach the logs, not even from errors (optional: pass the container name)
+if [ -n "${2:-}" ]; then
+  curl -s -o /dev/null "$base/_astro/missing-$RANDOM.js"; curl -s -o /dev/null "$base/media/"
+  if docker logs "$2" 2>&1 | grep -E 'client:|"GET ' >/dev/null; then fail "visitor details in the container log"; fi
+fi
 echo "smoke ok: $base"

@@ -18,10 +18,13 @@ jobs:
         env: { GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}", EVENT: "${{ github.event_name }}" }
         run: |
           if [ "$EVENT" != schedule ]; then echo build=true >> "$GITHUB_OUTPUT"; exit 0; fi
+          # Build only when no image exists yet for the newest release (the package is public)
           latest=$(gh api repos/thesubtleties/sbtlTV/releases/latest -q .tag_name)
-          live=$(curl -fsS https://sbtltv.com/version.txt || echo none)
-          echo "latest=$latest live=$live"
-          if [ "$latest" != "$live" ]; then echo build=true >> "$GITHUB_OUTPUT"; else echo build=false >> "$GITHUB_OUTPUT"; fi
+          if docker manifest inspect "ghcr.io/thesubtleties/sbtltv-web:$latest" >/dev/null 2>&1; then
+            echo "image for $latest exists"; echo build=false >> "$GITHUB_OUTPUT"
+          else
+            echo "no image for $latest yet"; echo build=true >> "$GITHUB_OUTPUT"
+          fi
   build:
     needs: decide
     if: needs.decide.outputs.build == 'true'
@@ -41,6 +44,8 @@ jobs:
       - run: pnpm test
       - run: pnpm build
         env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
+      - id: rel
+        run: echo "tag=$(cat dist/version.txt)" >> "$GITHUB_OUTPUT"
       - run: pnpm check-dist
       - run: pnpm check-links
       # Pushed only after every check above passed; a failed build leaves the live image alone
@@ -52,4 +57,5 @@ jobs:
           push: true
           tags: |
             ghcr.io/thesubtleties/sbtltv-web:main
-            ghcr.io/thesubtleties/sbtltv-web:${{ github.sha }}
+            ghcr.io/thesubtleties/sbtltv-web:${{ steps.rel.outputs.tag }}
+            ghcr.io/thesubtleties/sbtltv-web:${{ github.sha }}-${{ steps.rel.outputs.tag }}

@@ -115,6 +115,9 @@ footer {
 #shot-live:checked ~ .shot-tabs .t1, #shot-movies:checked ~ .shot-tabs .t2, #shot-series:checked ~ .shot-tabs .t3 { color: var(--accent); }
 @media (prefers-reduced-motion: reduce) {
   .frame, .shot-tabs label, .ind { animation: none; }
+  /* For browsers without :has(). Its own declarations so the minifier can't merge it into the
+     :has() rule below (an unknown selector drops the whole merged rule). */
+  .f1 { opacity: 1; z-index: 1; }
   .shots:not(:has(input:checked)) .f1 { opacity: 1; }
   .shots:not(:has(input:checked)) .t1 { color: var(--accent); }
 }
