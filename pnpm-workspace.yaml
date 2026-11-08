@@ -1,0 +1,3 @@
+overrides:
+  # @astrojs/check (via astro2tsx) otherwise resolves the 2.0 beta runtime, which crashes against @emnapi/core 1.x
+  "@emnapi/runtime": 1.11.3

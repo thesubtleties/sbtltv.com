@@ -1,0 +1,30 @@
+---
+import { Image } from 'astro:assets';
+import live from '../assets/shots/live.png';
+import movies from '../assets/shots/movies.png';
+import series from '../assets/shots/series.png';
+const shots = [
+  { id: 'live', label: 'Live TV', src: live, alt: 'The guide with search open for "football"' },
+  { id: 'movies', label: 'Movies', src: movies, alt: 'The Movies home with a featured title and trending posters' },
+  { id: 'series', label: 'Series', src: series, alt: 'The Series home with a featured show and trending posters' },
+];
+---
+{/*
+  Plays through the three on its own (CSS animation). Picking a label checks its radio,
+  which stops the cycle and shows that one. Works without JS; reduced motion shows the first.
+*/}
+<figure class="shot shots">
+  {shots.map((s) => <input class="sr" type="radio" name="shot" id={`shot-${s.id}`} />)}
+  <div class="frames">
+    {shots.map((s, i) => (
+      <div class={`frame f${i + 1}`}>
+        <Image src={s.src} alt={s.alt} widths={[800, 1600]} sizes="(min-width: 960px) 800px, 100vw" loading={i === 0 ? 'eager' : 'lazy'} />
+      </div>
+    ))}
+  </div>
+  <figcaption>Sample data, shown for illustration. See the note at the bottom.</figcaption>
+  <div class="shot-tabs">
+    <span class="ind" aria-hidden="true"></span>
+    {shots.map((s, i) => <label class={`t${i + 1}`} for={`shot-${s.id}`}>{s.label}</label>)}
+  </div>
+</figure>

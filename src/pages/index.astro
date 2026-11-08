@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Features from '../components/Features.astro';
+import Privacy from '../components/Privacy.astro';
+import Faq from '../components/Faq.astro';
+import Footer from '../components/Footer.astro';
+import { getImage } from 'astro:assets';
+import ogSource from '../assets/shots/movies.png';
+import { getRelease } from '../lib/release';
+import { DESCRIPTION, softwareJsonLd } from '../lib/seo';
+import '../styles/page.css';
+const release = await getRelease();
+// Link previews: a JPEG is the safest format across Discord, Slack, X and Facebook
+const og = await getImage({ src: ogSource, width: 1200, format: 'jpeg', quality: 80 });
+const image = { url: new URL(og.src, Astro.site).href, width: 1200, height: Math.round(1200 * ogSource.height / ogSource.width), alt: 'sbtlTV showing the Movies home' };
+---
+<Base title="sbtlTV - a clean, simple IPTV player" description={DESCRIPTION} image={image} jsonLd={softwareJsonLd(release, image.url)}>
+  <Hero release={release} />
+  <main>
+    <Features />
+    <Privacy />
+    <Faq />
+  </main>
+  <Footer />
+</Base>

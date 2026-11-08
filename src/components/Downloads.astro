@@ -1,0 +1,29 @@
+---
+import { formatDate, formatSize, type ReleaseInfo } from '../lib/release';
+interface Props { release: ReleaseInfo }
+const { release } = Astro.props;
+const d = release.downloads;
+---
+{/* down arrow, drawn with currentColor so it follows the button text */}
+<svg class="sprite" aria-hidden="true" width="0" height="0"><symbol id="dl" viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol></svg>
+<div class="platforms">
+  <div class="platform" data-os="windows">
+    <h3>Windows <span class="yours">Your computer</span></h3>
+    <a class="btn" data-download="win-setup" href={d['win-setup'].url}><svg class="icon" aria-hidden="true"><use href="#dl"/></svg><span class="label">Installer</span><span class="size">{formatSize(d['win-setup'].size)}</span></a>
+    <a class="btn secondary" data-download="win-portable" href={d['win-portable'].url}><span class="label">Portable</span><span class="size">{formatSize(d['win-portable'].size)}</span></a>
+    <p class="note">Windows 10 or 11, 64-bit. mpv included. The installer updates itself.</p>
+  </div>
+  <div class="platform" data-os="mac">
+    <h3>macOS <span class="yours">Your computer</span></h3>
+    <a class="btn" data-download="mac-dmg" href={d['mac-dmg'].url}><svg class="icon" aria-hidden="true"><use href="#dl"/></svg><span class="label">.dmg</span><span class="size">{formatSize(d['mac-dmg'].size)}</span></a>
+    <p class="note">Apple Silicon (M1 or later), macOS 13 or later. Signed and notarized. Updates itself.</p>
+  </div>
+  <div class="platform" data-os="linux">
+    <h3>Linux <span class="yours">Your computer</span></h3>
+    <a class="btn" data-download="linux-appimage" href={d['linux-appimage'].url}><svg class="icon" aria-hidden="true"><use href="#dl"/></svg><span class="label">AppImage</span><span class="size">{formatSize(d['linux-appimage'].size)}</span></a>
+    <a class="btn secondary" data-download="linux-deb" href={d['linux-deb'].url}><span class="label">.deb</span><span class="size">{formatSize(d['linux-deb'].size)}</span></a>
+    <p class="note">x86_64. Needs mpv from your package manager. The AppImage updates itself; the .deb doesn't.</p>
+  </div>
+</div>
+<p class="release">Version {release.version} · {formatDate(release.date)} · <a href={release.notesUrl}>Release notes</a> · <a href="https://github.com/thesubtleties/sbtlTV/releases">All releases</a></p>
+<script src="../scripts/os-pick.ts"></script>

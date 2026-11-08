@@ -1,0 +1,23 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.png';
+---
+<footer>
+  <div class="wrap foot">
+    <div class="foot-brand">
+      <a class="foot-name" href="/"><Image src={logo} alt="" width={28} height={28} /><span>sbtlTV</span></a>
+      <p>Free and open source, <a href="https://github.com/thesubtleties/sbtlTV/blob/main/LICENSE">AGPL-3.0</a>.</p>
+      <nav aria-label="Links">
+        <a href="https://github.com/thesubtleties/sbtlTV">GitHub</a>
+        <a href="https://github.com/thesubtleties/sbtlTV/issues">Issues</a>
+        <a href="https://github.com/thesubtleties/sbtlTV/releases">Releases</a>
+        <a href="https://github.com/thesubtleties/sbtltv.com">Site source</a>
+      </nav>
+    </div>
+    <div class="foot-legal">
+      <p>sbtlTV is a player. It doesn't provide, host or sell any channels, movies or shows; you use it with your own provider.</p>
+      <p>Screenshots on this site show the app with sample data. Any posters, logos, artwork or titles in them belong to their owners and appear only to show how the interface looks. If you own something shown here and want it removed, email <a href="mailto:steven@sbtl.dev">steven@sbtl.dev</a> and it will be taken down.</p>
+      <p>This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,21 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.png';
+import Downloads from './Downloads.astro';
+import Shots from './Shots.astro';
+import type { ReleaseInfo } from '../lib/release';
+interface Props { release: ReleaseInfo }
+const { release } = Astro.props;
+---
+<header class="wrap hero">
+  <div>
+    <div class="brand">
+      <Image src={logo} alt="" width={56} height={56} />
+      <h1>sbtlTV</h1>
+    </div>
+    <p class="tagline">A clean, simple and smooth IPTV player for live TV, movies and series, on Windows, Mac and Linux.</p>
+    <p class="muted">From your own provider, free and open source.</p>
+  </div>
+  <Shots />
+  <div class="downloads"><Downloads release={release} /></div>
+</header>
