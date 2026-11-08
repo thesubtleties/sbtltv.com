@@ -75,5 +75,15 @@ for (const f of ['dist/media/bg.webm', 'dist/media/bg.mp4', 'dist/media/bg-poste
   else if (readFileSync(f).length > 300_000) fail.push(`${f} is over 300 KB`);
 }
 
+// Lists are signed: dist must hold the exact signed bytes and a signature that verifies.
+{
+  const { createPublicKey, verify } = await import('node:crypto');
+  const pub = createPublicKey(readFileSync('lists/public-key.pem'));
+  const body = existsSync('dist/lists/v1.json') ? readFileSync('dist/lists/v1.json') : null;
+  const sig = existsSync('dist/lists/v1.json.sig') ? readFileSync('dist/lists/v1.json.sig', 'utf8').trim() : '';
+  if (!body || !sig) fail.push('lists/v1.json or its .sig missing from dist');
+  else if (!verify(null, body, pub, Buffer.from(sig, 'base64'))) fail.push('lists/v1.json signature does not verify (run pnpm sign-lists)');
+}
+
 if (fail.length) { console.error(fail.join('\n')); process.exit(1); }
 console.log('dist ok');

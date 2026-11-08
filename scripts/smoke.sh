@@ -21,6 +21,7 @@ etagz=$(curl -fsS --compressed -D - -o /dev/null "$base/lists/v1.json" | header 
 code=$(curl -sS -o /dev/null -w '%{http_code}' --compressed -H "If-None-Match: $etagz" "$base/lists/v1.json")
 [ "$code" = 304 ] || fail "compressed lists repeat gave $code, want 304"
 
+curl -fsS "$base/lists/v1.json.sig" | grep -Eq '^[A-Za-z0-9+/]{86}==$' || fail "lists signature missing or malformed"
 curl -fsS "$base/version.txt" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$' || fail "version.txt"
 code=$(curl -sS -o /dev/null -w '%{http_code}' "$base/nope")
 [ "$code" = 404 ] || fail "missing page gave $code, want 404"

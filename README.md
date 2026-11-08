@@ -20,6 +20,10 @@ Static Astro site, no analytics, no third-party requests. AGPL-3.0.
 `lists/v1.json` is served at `https://sbtltv.com/lists/v1.json` and read by the sbtlTV app. The build
 fails on an invalid file (see `src/lib/lists.ts`).
 
+Signed with Ed25519. After editing `lists/v1.json`, run `pnpm sign-lists` (the private key lives in
+`~/.config/sbtltv-lists/`, never in the repo). The build refuses an unsigned or mismatched file, and the
+app ignores one. `lists/public-key.pem` is the matching public key.
+
 ## Privacy
 
 No analytics, cookies or third-party requests. nginx keeps no access log. See the site's Privacy section.
