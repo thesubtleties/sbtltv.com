@@ -7,7 +7,7 @@
   .hero .downloads { grid-column: 1 / -1; }
 }
 .brand { display: flex; align-items: center; gap: 14px; }
-.brand img { width: 56px; height: 56px; }
+.brand svg { flex: none; color: var(--text); }
 .brand h1 { font-size: 40px; margin: 0; }
 .tagline { font-size: 21px; margin: 10px 0 0; line-height: 1.4; }
 .shot { margin: 0; }
@@ -49,6 +49,7 @@ footer {
   background: rgb(10 10 10 / 0.6); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
 }
 .foot { display: grid; gap: 32px; padding-top: 40px; padding-bottom: 48px; }
+.foot-name svg { flex: none; }
 .foot-name { display: inline-flex; align-items: center; gap: 10px; color: var(--text); font-weight: 500; font-size: 18px; text-decoration: none; }
 .foot-brand p { margin: 8px 0 14px; }
 .foot-brand p a { color: inherit; text-underline-offset: 2px; }

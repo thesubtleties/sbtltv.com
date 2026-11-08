@@ -1,11 +1,10 @@
 ---
-import { Image } from 'astro:assets';
-import logo from '../assets/logo.png';
+import Logo from './Logo.astro';
 ---
 <footer>
   <div class="wrap foot">
     <div class="foot-brand">
-      <a class="foot-name" href="/"><Image src={logo} alt="" width={28} height={28} /><span>sbtlTV</span></a>
+      <a class="foot-name" href="/"><Logo size={28} /><span>sbtlTV</span></a>
       <p>Free and open source, <a href="https://github.com/thesubtleties/sbtlTV/blob/main/LICENSE">AGPL-3.0</a>.</p>
       <nav aria-label="Links">
         <a href="https://github.com/thesubtleties/sbtlTV">GitHub</a>
