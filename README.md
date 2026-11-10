@@ -1,6 +1,6 @@
 # sbtltv.com
 
-The sbtlTV website and the curated lists file the app reads (`lists/v1.json`).
+The sbtlTV website and the Selected lists file the app reads (`/lists/v1.json`).
 Static Astro site, no analytics, no third-party requests. AGPL-3.0.
 
     pnpm install && pnpm dev
@@ -10,32 +10,24 @@ Static Astro site, no analytics, no third-party requests. AGPL-3.0.
 - The build reads the latest stable sbtlTV release from GitHub and bakes the download links in. If any
   file is missing or GitHub doesn't answer, the build fails and the live site stays as it was.
 - `Deploy` runs on push to main and hourly; the hourly run only builds when the registry has no
-  image tagged with the newest release yet (`ghcr.io/thesubtleties/sbtltv-web:vX.Y.Z`).
-  GitHub turns scheduled workflows off after 60 days without repo activity: list updates keep it alive,
-  otherwise run Deploy by hand after a release.
+  image tagged with the newest release yet (`ghcr.io/thesubtleties/sbtltv-web:vX.Y.Z`), or when the
+  lists snapshot for today (UTC) isn't the one live.
+  GitHub turns scheduled workflows off after 60 days without repo activity: publishing lists keeps it
+  alive, otherwise run Deploy by hand after a release.
 - The cluster restarts the site hourly to pull the new image (no cluster credentials in GitHub).
 
 ## Lists
 
-`lists/v1.json` is served at `https://sbtltv.com/lists/v1.json` and read by the sbtlTV app. The build
-fails on an invalid file (see `src/lib/lists.ts`).
+The lists are planned in the private `sbtltv-lists` repo (the full catalogue, dates, and the tools).
+Its `publish` writes `lists/snapshots/<YYYY-MM-DD>.json` + `.sig` here: one per day the line-up
+changes, signed there with a key that never leaves the maintainer's machine. Each holds only the lists
+on that day and those starting within a week.
 
-Signed with Ed25519. After editing `lists/v1.json`, run `pnpm sign-lists` (the private key lives in
-`~/.config/sbtltv-lists/`, never in the repo). The build refuses an unsigned or mismatched file, and the
-app ignores one. `lists/public-key.pem` is the matching public key.
+The build serves the newest snapshot dated today or earlier as `/lists/v1.json` (`src/lib/snapshot.ts`),
+byte for byte, and fails on an invalid or unsigned one; the app ignores a bad signature anyway.
+`lists/public-key.pem` is the matching public key. After publishing: `pnpm build && pnpm check-dist`,
+commit, push.
 
 ## Privacy
 
 No analytics, cookies or third-party requests. nginx keeps no access log. See the site's Privacy section.
-
-### Editing the lists
-
-1. Edit `lists/draft.json`: per list `id`, `name`, `blurb`, optional `from`/`until` (YYYY-MM-DD), and `titles`
-   as `["Title", year]`, `["Title", year, "all"]` (series: also take same-name TMDB variants) or `{ "tmdb": id }`.
-   Row order on the app's home = order in the file. 30-60 titles per list, best first: each user only sees
-   what their provider has, and a list hides itself under 6.
-2. `pnpm lists` checks every title against TMDB (prints what it matched; `<-- check` = year or name differs)
-   and how many your own library has. `pnpm lists --write` writes `lists/v1.json`.
-3. `pnpm sign-lists`, `pnpm build && pnpm check-dist`, commit, push.
-
-TMDB token: `~/.config/sbtltv-lists/tmdb.env` (or `TMDB_TOKEN`), never in the repo.

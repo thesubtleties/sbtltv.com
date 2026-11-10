@@ -1,15 +1,10 @@
 import { describe, expect, test } from 'vitest';
-import repoFile from '../../lists/v1.json';
 import { validateListsFile, validateListsSize } from './lists';
 
 const list = (over: Record<string, unknown> = {}) => ({
   id: 'halloween-classics', name: 'Halloween classics', blurb: 'Old favourites.', items: [694, 948, 539], ...over,
 });
 const file = (over: Record<string, unknown> = {}) => ({ v: 1, updated: '2026-11-07', movies: [list()], series: [], ...over });
-
-test('repo file is valid', () => {
-  expect(validateListsFile(repoFile)).toEqual([]);
-});
 
 describe('validateListsFile', () => {
   test('a good file passes, with dates', () => {

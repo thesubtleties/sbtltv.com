@@ -13,9 +13,7 @@
     "check": "astro check",
     "test": "vitest run",
     "check-dist": "node scripts/check-dist.mjs",
-    "check-links": "node scripts/check-links.mjs",
-    "sign-lists": "node scripts/sign-lists.mjs",
-    "lists": "node scripts/lists.mjs"
+    "check-links": "node scripts/check-links.mjs"
   },
   "dependencies": {
     "@fontsource/fira-sans": "^5.3.0",

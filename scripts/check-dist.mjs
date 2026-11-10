@@ -82,7 +82,7 @@ for (const f of ['dist/media/bg.webm', 'dist/media/bg.mp4', 'dist/media/bg-poste
   const body = existsSync('dist/lists/v1.json') ? readFileSync('dist/lists/v1.json') : null;
   const sig = existsSync('dist/lists/v1.json.sig') ? readFileSync('dist/lists/v1.json.sig', 'utf8').trim() : '';
   if (!body || !sig) fail.push('lists/v1.json or its .sig missing from dist');
-  else if (!verify(null, body, pub, Buffer.from(sig, 'base64'))) fail.push('lists/v1.json signature does not verify (run pnpm sign-lists)');
+  else if (!verify(null, body, pub, Buffer.from(sig, 'base64'))) fail.push('lists/v1.json signature does not verify (re-run publish in sbtltv-lists)');
 }
 
 if (fail.length) { console.error(fail.join('\n')); process.exit(1); }
