@@ -1,12 +1,11 @@
 {
  "v": 1,
- "updated": "2026-11-12",
+ "updated": "2026-11-28",
  "movies": [
   {
    "id": "thanksgiving-table",
    "name": "The Thanksgiving table",
    "blurb": "Families, long drives home, and dinners that go sideways.",
-   "from": "2026-11-19",
    "until": "2026-11-30",
    "items": [
     2609,
