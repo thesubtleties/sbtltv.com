@@ -59,9 +59,9 @@ try {
 } catch { fail.push('JSON-LD missing or not valid JSON'); }
 for (const f of ['dist/robots.txt', 'dist/sitemap.xml', 'dist/llms.txt']) if (!existsSync(f)) fail.push(`missing ${f}`);
 
-// Hero: three screenshots that crossfade, with labels that work without JS
-if ((html.match(/class="frame /g) || []).length !== 3) fail.push('hero needs three screenshot frames');
-for (const l of ['Live TV', 'Movies', 'Series']) if (!new RegExp(`<label[^>]*for="shot-[a-z]+"[^>]*>${l}</label>`).test(html)) fail.push(`missing shot label ${l}`);
+// Hero: four screenshots that crossfade, with labels that work without JS
+if ((html.match(/class="frame /g) || []).length !== 4) fail.push('hero needs four screenshot frames');
+for (const l of ['Live TV', 'Movies', 'Details', 'Series']) if (!new RegExp(`<label[^>]*for="shot-[a-z]+"[^>]*>${l}</label>`).test(html)) fail.push(`missing shot label ${l}`);
 
 // Reduced motion must show a screenshot even where :has() isn't supported (Firefox ESR 115)
 const css = (await import('node:fs')).readdirSync('dist/_astro').filter((f) => f.endsWith('.css')).map((f) => readFileSync(`dist/_astro/${f}`, 'utf8')).join('\n');
