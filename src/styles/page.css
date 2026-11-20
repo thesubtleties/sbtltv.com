@@ -71,49 +71,52 @@ footer {
   .platform { background: var(--surface); -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
 
-/* Hero screenshots: crossfade through three, labels underneath light up in step */
+/* Hero screenshots: crossfade through four (6 s each), labels underneath light up in step */
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .frames { position: relative; aspect-ratio: 16 / 9; }
-.frame { position: absolute; inset: 0; opacity: 0; animation: shot-cycle 18s infinite both; }
+.frame { position: absolute; inset: 0; opacity: 0; animation: shot-cycle 24s infinite both; }
 .frame img { border-radius: var(--radius); border: 1px solid var(--line); box-shadow: 0 24px 80px rgb(0 212 255 / 0.12); }
-.f1 { animation-delay: -0.9s; } .f2 { animation-delay: 5.1s; } .f3 { animation-delay: 11.1s; }
-@keyframes shot-cycle { 0% { opacity: 0; } 5% { opacity: 1; } 33% { opacity: 1; } 38% { opacity: 0; } 100% { opacity: 0; } }
+.f1 { animation-delay: -0.9s; } .f2 { animation-delay: 5.1s; } .f3 { animation-delay: 11.1s; } .f4 { animation-delay: 17.1s; }
+@keyframes shot-cycle { 0% { opacity: 0; } 3.75% { opacity: 1; } 25% { opacity: 1; } 28.75% { opacity: 0; } 100% { opacity: 0; } }
 
 /* Same look as the app's Settings segmented control (st-seg), with the highlight sliding */
 .shot-tabs {
-  --tab-w: 92px; position: relative; display: flex; gap: 0; height: 34px; padding: 2px; width: calc(var(--tab-w) * 3 + 6px);
+  --tab-w: 88px; position: relative; display: flex; gap: 0; height: 34px; padding: 2px; width: calc(var(--tab-w) * 4 + 6px);
   margin: 12px auto 0; background: rgb(13 13 13 / 0.7); border: 1px solid var(--line); border-radius: 6px;
   -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
 }
+@media (max-width: 420px) { .shot-tabs { --tab-w: 76px; } }
 .shot-tabs label {
   position: relative; z-index: 1; width: var(--tab-w); display: grid; place-items: center; cursor: pointer;
-  font-size: 13px; font-weight: 500; color: color-mix(in srgb, #fff 60%, var(--muted)); animation: tab-cycle 18s infinite both;
+  font-size: 13px; font-weight: 500; color: color-mix(in srgb, #fff 60%, var(--muted)); animation: tab-cycle 24s infinite both;
 }
 .shot-tabs label:hover { color: var(--text); }
-.shot-tabs .t1 { animation-delay: -0.9s; } .shot-tabs .t2 { animation-delay: 5.1s; } .shot-tabs .t3 { animation-delay: 11.1s; }
-@keyframes tab-cycle { 0%, 36%, 100% { color: color-mix(in srgb, #fff 60%, var(--muted)); } 3%, 33% { color: var(--accent); } }
+.shot-tabs .t1 { animation-delay: -0.9s; } .shot-tabs .t2 { animation-delay: 5.1s; } .shot-tabs .t3 { animation-delay: 11.1s; } .shot-tabs .t4 { animation-delay: 17.1s; }
+@keyframes tab-cycle { 0%, 27%, 100% { color: color-mix(in srgb, #fff 60%, var(--muted)); } 2.25%, 25% { color: var(--accent); } }
 .shot-tabs .ind {
   position: absolute; left: 2px; top: 2px; bottom: 2px; width: var(--tab-w); border-radius: 4px;
   border: 1px solid var(--accent); background: color-mix(in srgb, var(--accent) 16%, transparent);
-  animation: ind-cycle 18s infinite both; animation-delay: -0.9s;
+  animation: ind-cycle 24s infinite both; animation-delay: -0.9s;
 }
 @keyframes ind-cycle {
-  0% { transform: translateX(200%); }
-  5%, 33% { transform: translateX(0); }
-  38%, 66.5% { transform: translateX(100%); }
-  71.5%, 100% { transform: translateX(200%); }
+  0% { transform: translateX(300%); }
+  3.75%, 25% { transform: translateX(0); }
+  28.75%, 50% { transform: translateX(100%); }
+  53.75%, 75% { transform: translateX(200%); }
+  78.75%, 100% { transform: translateX(300%); }
 }
 .shots:hover .frame, .shots:hover .shot-tabs label, .shots:hover .ind { animation-play-state: paused; }
-#shot-live:focus-visible ~ .shot-tabs .t1, #shot-movies:focus-visible ~ .shot-tabs .t2, #shot-series:focus-visible ~ .shot-tabs .t3 { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+#shot-live:focus-visible ~ .shot-tabs .t1, #shot-movies:focus-visible ~ .shot-tabs .t2, #shot-details:focus-visible ~ .shot-tabs .t3, #shot-series:focus-visible ~ .shot-tabs .t4 { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
 
 /* A pick stops the cycle and shows that one */
 .shots:has(input:checked) .frame { animation: none; opacity: 0; }
 .shots:has(input:checked) .shot-tabs label, .shots:has(input:checked) .ind { animation: none; }
 .shots:has(input:checked) .ind { transition: transform 250ms ease; }
 #shot-movies:checked ~ .shot-tabs .ind { transform: translateX(100%); }
-#shot-series:checked ~ .shot-tabs .ind { transform: translateX(200%); }
-#shot-live:checked ~ .frames .f1, #shot-movies:checked ~ .frames .f2, #shot-series:checked ~ .frames .f3 { opacity: 1; transition: opacity 300ms; }
-#shot-live:checked ~ .shot-tabs .t1, #shot-movies:checked ~ .shot-tabs .t2, #shot-series:checked ~ .shot-tabs .t3 { color: var(--accent); }
+#shot-details:checked ~ .shot-tabs .ind { transform: translateX(200%); }
+#shot-series:checked ~ .shot-tabs .ind { transform: translateX(300%); }
+#shot-live:checked ~ .frames .f1, #shot-movies:checked ~ .frames .f2, #shot-details:checked ~ .frames .f3, #shot-series:checked ~ .frames .f4 { opacity: 1; transition: opacity 300ms; }
+#shot-live:checked ~ .shot-tabs .t1, #shot-movies:checked ~ .shot-tabs .t2, #shot-details:checked ~ .shot-tabs .t3, #shot-series:checked ~ .shot-tabs .t4 { color: var(--accent); }
 @media (prefers-reduced-motion: reduce) {
   .frame, .shot-tabs label, .ind { animation: none; }
   /* For browsers without :has(). Its own declarations so the minifier can't merge it into the

@@ -2,15 +2,17 @@
 import { Image } from 'astro:assets';
 import live from '../assets/shots/live.png';
 import movies from '../assets/shots/movies.png';
+import details from '../assets/shots/details.png';
 import series from '../assets/shots/series.png';
 const shots = [
-  { id: 'live', label: 'Live TV', src: live, alt: 'The guide with search open for "football"' },
-  { id: 'movies', label: 'Movies', src: movies, alt: 'The Movies home with a featured title and trending posters' },
-  { id: 'series', label: 'Series', src: series, alt: 'The Series home with a featured show and trending posters' },
+  { id: 'live', label: 'Live TV', src: live, alt: 'The guide in the Nord theme, with search open for "football"' },
+  { id: 'movies', label: 'Movies', src: movies, alt: 'The Movies home with its art running edge to edge under the Simple header' },
+  { id: 'details', label: 'Details', src: details, alt: 'A movie page in the Tokyo Night theme, its backdrop under the title bar, with More like this below' },
+  { id: 'series', label: 'Series', src: series, alt: 'The Series home in sbtl light with the Floating header' },
 ];
 ---
 {/*
-  Plays through the three on its own (CSS animation). Picking a label checks its radio,
+  Plays through the four on its own (CSS animation). Picking a label checks its radio,
   which stops the cycle and shows that one. Works without JS; reduced motion shows the first.
 */}
 <figure class="shot shots">
